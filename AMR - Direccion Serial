@@ -1,21 +1,18 @@
 /*
 
-	Codigo Frenos
-	YRA - Machinime - Peter
+	Codigo Direccion
+	YRA - Machinime - Peter - Ivan - AMH19
 
 EL formato "correcto" para la comunicacion de mensajes
-se sugiere como "100 85" o "100_85" donde "100" sera
-el ID para el freno (puede cambiar) y "85" debera ser
-la posicion a la cual se extiende el piston.
+se sugiere como "200 85" o "200_85" donde "200" sera
+el ID para el freno (puede cambiar) y "85" debera indicar
+el giro del engranaje.
 
-Ya esta considerado que 0% es el maximo que soporta
-el freno antes de dañarse. Hay que tener cuidado.
+Cuando se envia "ID valor" ("200 40") si el valor es
+menor a 51% gira a la izquierda; si el valor es mayor
+a 51% gira a la derecha.
 
-El maximo se considera lo mas que se puede extender
-el piston, pero contraerlo más del 100% podria hacer 
-que tardase mas en frenar.
-
-	LA DIRECCION YA ESTA PROBADA Y FUNCIONA
+	NO ESTA FUNCIONANDO EL FINAL DE CARRERA DE LA LLANTA DERECHA
 
 */
 
@@ -27,23 +24,18 @@ que tardase mas en frenar.
 // Se utiliza un Pro Micro
 #define PIN_PWM 9
 #define PIN_DIR 7
-#define PIN_FEEDBACK A7
+#define PIN_FEEDBACK A7 // Se utiliza un Pro Micro
 
 // -- Calibracion feedback --
-const int RAW_MIN = 820; // Heuristico
-const int RAW_MAX = 890; // Heuristico - "Cuidado, mas podria dañar freno"
+const int RAW_MIN = 412; // -- Para evitar el final de carrera (No sirve)
+const int RAW_MAX = 826; // -- Para evitar el final de carrera
 
-// -- Existe un ruido de engranajes y un pitido agudo del motor
-// -- Para evitar ambos se limitara de 100 a 5 % de el mapeo actual
-// -- El ruido de engranajes suena si se baja por debajo de 5% aunque cambie el mapeo
-// -- REVISAR PORQUE SUECEDE ESTOS SONIDOS.
-
-// -- Inicializacion variables de control --
+// --  Inicializacion variables de control --
 byte posicionObjetivo;
 const int TOLERANCIA = 1; // Para evitar oscilaciones
 
-// -- Inicializacion variables del filtro de media movil --
-const int N = 5;	 // Heuristico
+// --  Inicializacion variables del filtro de media movil --
+const int N = 6;   	// Heuristico
 int bufferLecturas[N];
 long sumaLecturas = 0;
 int indice = 0;
@@ -69,13 +61,13 @@ int leerPotFiltrado() {
 // Esta funcion: Regresa la lectura del voltaje en porcentaje
 byte lecturaToPorcentaje(int lecturaRaw) {
   lecturaRaw = constrain(lecturaRaw, RAW_MIN, RAW_MAX);
-  int porcentaje = map(lecturaRaw, RAW_MIN, RAW_MAX, 100, 0);
+  int porcentaje = map(lecturaRaw, RAW_MIN, RAW_MAX, 0, 100);
   return (byte)constrain(porcentaje, 0, 100);
 }
 // =============================================================
 
-// Esta funcion: Obtiene lo que se envia al serial 
-// y lo convierte a un objetivo de la posicion del piston.
+// Esta funcion: Obtiene lo que tiene el serial y lo convierte a un Objetivo 
+// de la posicion de giro.
 void actualizar(String s) {
   s.trim();
   s.replace("_", " ");  // por si el usuario pone guion
@@ -91,10 +83,6 @@ void actualizar(String s) {
 
   int nuevoObjetivo = dato2.toInt();      // se interpreta como decimal
   nuevoObjetivo = constrain(nuevoObjetivo, 0, 100);
-  
-  if (nuevoObjetivo < 5){		  // se limita el mapeo hasta 5% para evitar ruido de engranajes
-    nuevoObjetivo = 5;
-  }
   posicionObjetivo = (byte)nuevoObjetivo;
 
   Serial.print("Nuevo objetivo establecido a: ");
@@ -103,18 +91,18 @@ void actualizar(String s) {
 }
 // =============================================================
 
-// Esta Funcion: Lleva la posicion actual de nuestro piston al deseado.
+// Esta Funcion: Lleva al angulo actual al objetivo.
 void moverActuadorHaciaObjetivo() {
   byte posicionActual = lecturaToPorcentaje(leerPotFiltrado());
   int error = posicionObjetivo - posicionActual;
 
-  if (abs(error) <= TOLERANCIA) { 
+  if (abs(error) <= TOLERANCIA) {
     analogWrite(PIN_PWM, 0);
     return;
   }
 
-  digitalWrite(PIN_DIR, error > 0 ? HIGH : LOW);
-  byte pwmValor = map(abs(error), 0, 100, 140, 255);
+  digitalWrite(PIN_DIR, error > 0 ? LOW : HIGH);
+  byte pwmValor = map(abs(error), 0, 100, 135, 195);
   pwmValor = constrain(pwmValor, 0, 255);
   analogWrite(PIN_PWM, pwmValor);
 }
@@ -152,12 +140,11 @@ void loop() {
       actualizar(input);
     }
   }
-
   moverActuadorHaciaObjetivo();
 
   static unsigned long lastPrint = 0;	// Contador de tiempo
   if (millis() - lastPrint > 250) {
-    lastPrint = millis();  // Cada 250 ms
+    lastPrint = millis();   // Cada 250 ms 
 
     int lectura = leerPotFiltrado();
     byte porcentaje = lecturaToPorcentaje(lectura);
@@ -165,7 +152,7 @@ void loop() {
     // Convertir a voltaje (Arduino de 10 bits y 5V referencia)
     float voltaje = (lectura * 5.0) / 1023.0;
 
-    Serial.print("Posicion actual: ");
+    Serial.print("Angulo de direccion actual: ");
     Serial.print(porcentaje);
     Serial.print("%  |  Lectura: ");
     Serial.print(lectura);
