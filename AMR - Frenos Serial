@@ -86,7 +86,8 @@ void actualizar(String s) {
 
   int nuevoObjetivo = dato2.toInt();      // se interpreta como decimal
   nuevoObjetivo = constrain(nuevoObjetivo, 0, 100);
-  if (nuevoObjetivo < 5){
+  
+  if (nuevoObjetivo < 5){		  // se limita el mapeo hasta 5% para evitar ruido de engranajes
     nuevoObjetivo = 5;
   }
   posicionObjetivo = (byte)nuevoObjetivo;
