@@ -15,8 +15,8 @@ bool paroEmergenciaActivo = false;
 
 MCP_CAN CAN0(CAN_CS);
 
-const int RAW_MIN = 412; 
-const int RAW_MAX = 826; 
+const int RAW_MIN = 432; 
+const int RAW_MAX = 847; 
 
 byte posicionObjetivo;
 const int TOLERANCIA = 1; 

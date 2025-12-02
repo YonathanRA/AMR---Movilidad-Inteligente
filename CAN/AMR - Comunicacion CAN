@@ -39,7 +39,7 @@ const int DEADBAND_DIR = 30;        // dirección (zona muerta en joystick)
 const int DEADBAND_VEL = 30;   // zona muerta adicional para velocidad (Preferible para que no este mandando muchos mensajes al CAN)
 const int DEADZONE_FRENO = 3;       // zona muerta para Frenos (ecita que se sobre esfuerce debido al joysitck)
 const int DEADZONE_DIR_ENVIO = 2;   // zona muerta para dirección (evita los brincos que da por el control)
-const int CENTRO_DIR = 51;
+const int CENTRO_DIR = 50;
 
 // ===== CAN =====
 int lastVel = -1;

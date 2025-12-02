@@ -14,13 +14,13 @@
 MCP_CAN CAN0(CAN_CS);
 
 // --- Calibración feedback ---
-const int RAW_MIN = 830;
-const int RAW_MAX = 900;
+const int RAW_MIN = 820;
+const int RAW_MAX = 868;
 
 // Control
 byte posicionObjetivo;
 const int TOLERANCIA = 1;   // ±1% zona muerta
-bool modoEmergencia = false; // <--- NUEVA variable
+bool modoEmergencia = false; 
 
 // --- Filtro de media móvil ---
 const int N = 5;
