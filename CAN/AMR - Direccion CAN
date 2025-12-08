@@ -5,13 +5,10 @@
 #define CAN_SPEED CAN_500KBPS
 #define CAN_CLOCK MCP_8MHZ
 #define FILTRO_ID 0x100  
-#define ID_PARO_EMERGENCIA 0x210
 
 #define PIN_PWM 9
 #define PIN_DIR 7
 #define PIN_FEEDBACK A7 
-
-bool paroEmergenciaActivo = false;
 
 MCP_CAN CAN0(CAN_CS);
 
@@ -106,32 +103,10 @@ void loop() {
     byte buf[8];
     CAN0.readMsgBuf(&rxId, &len, buf);
 
-    // Paro de emergencia
-    if (rxId == ID_PARO_EMERGENCIA && len >= 1) {
-      if (buf[0] == 1) {
-        paroEmergenciaActivo = true;
-        posicionObjetivo = 51;  // Llevar a posición original (centro)
-
-      }
-      else if (buf[0] == 0) {
-        paroEmergenciaActivo = false;
-
-      }
-      return; // salir después de manejar el paro
-    }
-
-    // Control normal de dirección (solo si no hay paro activo)
-    if (!paroEmergenciaActivo && rxId == FILTRO_ID && len >= 1) {
+    if (rxId == FILTRO_ID && len >= 1) {
       posicionObjetivo = buf[0];
       enviarFeedbackCAN();
     }
   }
-
-  // Mientras el paro esté activo, mantener la dirección en 51%
-  if (paroEmergenciaActivo) {
-    posicionObjetivo = 51;
-  }
-
   moverActuadorHaciaObjetivo();
 }
-
