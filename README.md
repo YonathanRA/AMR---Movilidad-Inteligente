@@ -9,19 +9,23 @@ El objetivo es documentar los módulos principales, su comunicación mediante **
 ## Estructura del Repositorio
 
 El repositorio se divide en dos carpetas principales:
+```
+AMR---Movilidad-Inteligente/
+│
+├── CAN/ 
+│ ├── "AMR - Comunicacion CAN" 
+│ ├── "AMR - Direccion CAN"  
+│ ├── "AMR - Frenos CAN" 
+│ └── "AMR - Tren_Motriz CAN."  
+│
+└── Serial/
+├── "AMR - Comunicacion Serial"
+├── "AMR - Direccion Serial" 
+├── "AMR - Frenos Serial" 
+└── "AMR - Tren_Motriz Serial" 
+```
 
-AMR1:
-  CAN:                       
-    - "AMR - Comunicacion CAN.ino"
-    - "AMR - Direccion CAN.ino"
-    - "AMR - Frenos CAN.ino"
-    - "AMR - Tren_Motriz CAN.ino"
-
-  Serial:           
-    - "AMR - Comunicacion Serial"
-    - "AMR - Direccion Serial"
-    - "AMR - Frenos Serial"
-    - "AMR - Tren_Motriz Serial"
+---
 
 ## Módulos del AMR1
 
