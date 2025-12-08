@@ -54,7 +54,12 @@ AMR---Movilidad-Inteligente/
 > Antes de conectar actuadores: revisar alimentaciones y la conexión a tierra.
 
 ---
+## Mejoras a Futuro Implementar
 
+El control del AMR tiene 2 defectos: 
+- El control bluethoot parece ser que se tiene que mover rapidamente dos veces para que funcione la palanca de direccion
+- En modo serial se tiene que mandar dos veces la velocidad para que pueda leerla correctamente.
+---
 ## Autores
 
 - Franco Abraham Díez
