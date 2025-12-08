@@ -19,7 +19,6 @@ AMR---Movilidad-Inteligente/
 │ └── "AMR - Tren_Motriz CAN."  
 │
 └── Serial/
-├── "AMR - Comunicacion Serial"
 ├── "AMR - Direccion Serial" 
 ├── "AMR - Frenos Serial" 
 └── "AMR - Tren_Motriz Serial" 
@@ -43,8 +42,7 @@ AMR---Movilidad-Inteligente/
 1. **Pruebas unitarias (Serial)**  
    - Abrir la carpeta `Serial/` y cargar el sketch correspondiente al módulo que quieras probar:  
      - `AMR - Direccion Serial`  
-     - `AMR - Frenos Serial`  
-     - `AMR - Comunicacion Serial`  
+     - `AMR - Frenos Serial`   
      - `AMR - Tren_Motriz Serial`  
    - Conectar el microcontrolador al PC y abrir el monitor serial para hacer pruebas y ajustes.
 
