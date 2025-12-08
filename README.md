@@ -1,48 +1,67 @@
-# Smart Mobility 2025--AMR1 Modules
+# Movilidad Inteligente 2025 - AMR1
+**Códigos para Arquitectura de Control y Comunicación**
 
-This repository contains the codes implementen on the microcontrolers use in the AMR1 plataform
+Este repositorio contiene el conjunto de códigos utilizados en **AMR1**, una plataforma de movil.
+El objetivo es documentar los módulos principales, su comunicación mediante **CAN** y **Serial**.
 
-# AMR1 Module Description Summary
+---
 
-| Module | Description | Subscribes | Publishes |
-|------|-------------|------------|-----------|
-| **amr_imu_encoder** | Odometry estimation from IMU + Encoder | Gets data via Pyserial from ESP32 |`/amr/odom`|
-| **pose_ekf_amr** | Pose estimation from IMU + Encoder \[x, y, θ\] | `/amr/odom`| `/amr/pose` |
-| **amr_pure_pursuit** | Pure Pursuit controller for autonomous driving | `/amr/pose`| None |
-| **trayectoria_grabar_csv_node** | Node to record waypoints and plot desired trajectory | `/amr/pose` | None |
+## Estructura del Repositorio
 
+El repositorio se divide en dos carpetas principales:
 
-## Authors
+AMR1:
+  CAN:                       
+    - "AMR - Comunicacion CAN.ino"
+    - "AMR - Direccion CAN.ino"
+    - "AMR - Frenos CAN.ino"
+    - "AMR - Tren_Motriz CAN.ino"
 
-Abraham Moro-Hernandez
-Tecnologico de Monterrey – Campus Puebla
---Smart Mobility Concentration-- 
-LinkedIn www.linkedin.com/in/abraham-moro-hernandez-amh19
+  Serial:           
+    - "AMR - Comunicacion Serial"
+    - "AMR - Direccion Serial"
+    - "AMR - Frenos Serial"
+    - "AMR - Tren_Motriz Serial"
 
-Mariana Manjarrez Lima
-Tecnologico de Monterrey – Campus Puebla
---Smart Mobility Concentration-- 
-E-mail: marianamanjarrezlima@gmail.com
+## Módulos del AMR1
 
-Iván Valdéz del Toro
-Tecnologico de Monterrey – Campus Puebla
---Smart Mobility Concentration-- 
-LinkedIn https://www.linkedin.com/in/ivan-valdez-069730365?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app
+| Módulo | Microcontrolador | Descripción |
+|--------|------------------|-------------|
+| **Dirección** | Pro Micro | Controla el motor de 24 V encargado del giro del vehículo. |
+| **Frenos** | Pro Micro | Activa el pistón actuador de freno de 12 V. |
+| **Comunicación / Control** | ESP32 | Recibe comandos vía Bluetooth y Serial/CAN, coordina y reenvía mensajes a los demás módulos. |
+| **Tren Motriz** | ESP32 | Controla el motor de tracción de 48 V. |
 
-Franco Abraham Díez
-Tecnologico de Monterrey – Campus Puebla
---Smart Mobility Concentration-- 
-LinkedIn www.linkedin.com/in/franco-abraham-diez
+---
 
-Yonathan Romero Amador
-Tecnologico de Monterrey – Campus Puebla
---Smart Mobility Concentration-- 
-E-mail: romeroamadoryonathan@gmail.com
+## Cómo usar / pruebas rápidas
 
-Pedro García Millán
-Tecnologico de Monterrey – Campus Puebla
---Smart Mobility Concentration-- 
-LinkedIn www.linkedin.com/in/pedro-garcia-millan
+1. **Pruebas unitarias (Serial)**  
+   - Abrir la carpeta `Serial/` y cargar el sketch correspondiente al módulo que quieras probar:  
+     - `AMR - Direccion Serial`  
+     - `AMR - Frenos Serial`  
+     - `AMR - Comunicacion Serial`  
+     - `AMR - Tren_Motriz Serial`  
+   - Conectar el microcontrolador al PC y abrir el monitor serial para hacer pruebas y ajustes.
+
+2. **Integración final (CAN)**  
+   - Subir los sketches de la carpeta `CAN/` a cada placa según su función.  
+   - Asegurarse de las terminaciones y IDs del bus CAN y de la alimentación correcta de motores/actuadores.  
+   - Verificar que el módulo `AMR - Comunicacion CAN` (ESP32) esté recibiendo comandos Bluetooth y retransmitiendo por CAN.
+
+> Antes de conectar actuadores: revisar alimentaciones y la conexión a tierra.
+
+---
+
+## Autores
+
+- Franco Abraham Díez
+- Yonathan Romero Amador
+- Abraham Moro Hernandez
+- Mariana Manjarrez Lima
+- Iván Valdéz del Toro
+- Pedro García Millán
+
 
 
 
